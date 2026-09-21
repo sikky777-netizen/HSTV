@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#101319" />
+  <meta name="description" content="시청거리, 시력, 예산, 콘텐츠, 방 밝기와 설치환경을 반영해 TV 크기와 패널을 추천하는 계산기" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>우리집 TV 계산기</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <div class="logo" aria-hidden="true">TV</div>
+      <div>
+        <strong>우리집 TV 계산기</strong>
+        <span>거리·시력·예산·환경 맞춤 추천</span>
+      </div>
+    </div>
+    <button id="installBtn" class="ghost-btn" type="button" hidden>앱 설치</button>
+  </header>
+
+  <main class="shell">
+    <section id="inputView" class="app-view is-active" aria-labelledby="inputTitle">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">TV SIZE & DISPLAY FITTER</p>
+        <h1 id="inputTitle">우리 집에는<br><em>몇 인치 TV</em>가 맞을까?</h1>
+        <p class="hero-copy">시청거리로 기본 크기를 잡고, 시력은 가독성 보정값으로만 사용합니다. 예산과 밝기, 콘텐츠, 게임, 설치환경까지 함께 반영합니다.</p>
+      </div>
+      <div class="hero-tv" aria-hidden="true">
+        <div class="tv-screen"><span id="heroSize">85</span><small>inch</small></div>
+        <div class="tv-stand"></div>
+      </div>
+    </section>
+
+    <a class="tv-install-ad top-ad" href="tel:01050928232" aria-label="벽걸이 TV 설치와 선 숨김 상담 전화 010-5092-8232">
+      <img src="./assets/tv_install_320x80.png" width="320" height="80" alt="벽걸이 TV 설치 010-5092-8232">
+      <span>선 숨김까지 깔끔하게 · 전화 상담</span>
+    </a>
+
+    <form id="tvForm" novalidate>
+      <section class="panel compact-panel">
+        <div class="section-head"><span>01</span><div><h2>기본 조건</h2><p>추천 인치를 결정하는 가장 중요한 값입니다.</p></div></div>
+        <div class="grid primary-fields">
+          <label class="field">
+            <span>소파 눈 위치 → TV 화면 거리</span>
+            <div class="input-unit"><input id="distance" type="number" min="0.8" max="8" step="0.1" value="2.8" inputmode="decimal" required><b>m</b></div>
+            <small>벽까지가 아니라 실제 눈 위치에서 화면까지의 대략적인 거리</small>
+          </label>
+          <fieldset class="choice-group">
+            <legend>주로 무엇을 보나요?</legend>
+            <div class="seg four compact-seg">
+              <label><input type="radio" name="content" value="general" checked><span>📺<b>방송</b><small>뉴스·드라마</small></span></label>
+              <label><input type="radio" name="content" value="movie"><span>🎬<b>영화·OTT</b><small>몰입감</small></span></label>
+              <label><input type="radio" name="content" value="sports"><span>⚽<b>스포츠</b><small>움직임</small></span></label>
+              <label><input type="radio" name="content" value="youtube"><span>▶️<b>유튜브</b><small>텍스트·영상</small></span></label>
+            </div>
+          </fieldset>
+          <label class="field"><span>TV 구매 예산</span><select id="budget"><option value="none">예산 상관없음</option><option value="100">100만원 이하</option><option value="200" selected>100 ~ 200만원</option><option value="300">200 ~ 300만원</option><option value="500">300 ~ 500만원</option><option value="999">500만원 이상</option></select></label>
+        </div>
+
+        <details class="more-options">
+          <summary><span><b>더 정확히 맞추기</b><small>시력·게임·밝기·설치 상세 조건 9개</small></span><i aria-hidden="true">⌄</i></summary>
+          <div class="more-options-body">
+            <div class="grid two">
+              <label class="field"><span>TV 볼 때의 시력</span><select id="vision"><option value="0">1.0 이상 · 보정 없음</option><option value="1">0.7 ~ 0.9 · 약간 크게</option><option value="2">0.4 ~ 0.6 · 가독성 보정</option><option value="3">0.3 이하 · 가독성 우선</option></select></label>
+              <label class="field"><span>게임 사용</span><select id="gaming"><option value="none">거의 안 함</option><option value="casual">가끔 함</option><option value="often">자주 함</option></select></label>
+              <label class="switch-row"><span><b>자막을 자주 봄</b><small>작은 글씨 가독성 반영</small></span><input id="subtitles" type="checkbox" role="switch"></label>
+              <label class="field"><span>구매 성향</span><select id="priority"><option value="balanced" selected>크기와 화질 균형</option><option value="size">같은 돈이면 큰 화면</option><option value="quality">같은 돈이면 화질</option></select></label>
+              <label class="field"><span>거실 밝기</span><select id="brightness"><option value="dark">주로 어두움</option><option value="normal" selected>보통</option><option value="bright">낮에도 매우 밝음</option></select></label>
+              <label class="field"><span>시청 위치</span><select id="viewing"><option value="front" selected>대부분 정면 1~2명</option><option value="wide">가족이 여러 각도에서 봄</option></select></label>
+              <label class="field"><span>설치 방식</span><select id="installType"><option value="wall" selected>벽걸이</option><option value="stand">스탠드</option></select></label>
+              <label class="field"><span>설치 공간 가로폭</span><div class="input-unit"><input id="wallWidth" type="number" min="100" max="1000" step="1" value="260" inputmode="numeric"><b>cm</b></div></label>
+              <label class="field"><span>앉았을 때 눈높이</span><div class="input-unit"><input id="eyeHeight" type="number" min="70" max="180" step="1" value="105" inputmode="numeric"><b>cm</b></div></label>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <div id="validation" class="validation" role="alert" aria-live="polite"></div>
+      <button class="primary-btn" type="submit">내 TV 추천 결과 보기 <span>→</span></button>
+    </form>
+    </section>
+
+    <section id="resultView" class="app-view results" aria-live="polite" aria-labelledby="resultTitle" hidden>
+      <div class="result-toolbar"><button id="backToInput" type="button" class="back-btn">← 조건 다시 입력</button><span>MY TV FIT</span></div>
+      <div class="result-title"><p>당신의 맞춤 추천</p><h2 id="resultTitle">당신에게 맞는 TV</h2></div>
+      <div class="result-hero">
+        <div class="big-result"><span>현실 추천</span><strong id="realSize">75<small>인치</small></strong><p id="realReason">예산과 사용 환경을 고려한 추천</p></div>
+        <div class="big-result alt"><span>조건상 이상적</span><strong id="idealSize">85<small>인치</small></strong><p id="idealRange">적정 범위 77~98인치</p></div>
+      </div>
+      <div class="result-grid">
+        <article class="metric"><span>추천 패널</span><strong id="panelType">Mini LED / QLED</strong><small id="panelReason">밝기와 예산 균형</small></article>
+        <article class="metric"><span>핵심 사양</span><strong id="features">4K · 120Hz 권장</strong><small>콘텐츠에 맞춘 우선 사양</small></article>
+        <article class="metric"><span>권장 시청거리</span><strong id="viewDistance">2.3 ~ 3.0m</strong><small>선택 TV 기준 참고 범위</small></article>
+        <article class="metric"><span>설치 적합성</span><strong id="wallFit">설치 여유 있음</strong><small id="wallFitDetail">좌우 공간 약 70cm</small></article>
+      </div>
+      <div class="explain"><h3>왜 이렇게 추천했나요?</h3><p id="explanation"></p></div>
+      <div class="install-card">
+        <div><span>벽걸이 설치 가이드</span><strong id="mountHeight">화면 중심 약 105~115cm</strong><p id="mountNote">앉았을 때 눈높이 기준. 벽체와 콘센트 위치를 함께 확인하세요.</p></div>
+        <a href="tel:01050928232">벽걸이 TV 설치 상담</a>
+      </div>
+      <div class="ad-slot result-ad" aria-label="광고 영역"><span>AD</span><p>TV 쇼핑 · 설치 · 제휴 배너 영역</p></div>
+      <p class="result-note">시력·가격·설치 결과는 구매 전 확인을 돕는 참고값입니다.</p>
+    </section>
+  </main>
+
+  <footer>© TV Calculator · 스마트한 TV 선택을 위한 참고 계산기</footer>
+  <script src="./app.js" defer></script>
+</body>
+</html>
