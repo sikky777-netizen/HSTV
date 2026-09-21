@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#101319" />
   <meta name="description" content="시청거리, 시력, 예산, 콘텐츠, 방 밝기와 설치환경을 반영해 TV 크기와 패널을 추천하는 계산기" />
+  <link rel="canonical" href="https://hstv.onentop.art/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:site_name" content="우리집 TV 계산기" />
+  <meta property="og:title" content="우리집 TV 계산기｜몇 인치 TV가 맞을까?" />
+  <meta property="og:description" content="시청거리·예산·콘텐츠·설치환경을 입력하고 우리 집에 맞는 TV 크기를 바로 확인해보세요." />
+  <meta property="og:url" content="https://hstv.onentop.art/" />
+  <meta property="og:image" content="https://hstv.onentop.art/assets/og-tv-calculator.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="벽걸이 TV가 설치된 현대적인 거실" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="우리집 TV 계산기｜몇 인치 TV가 맞을까?" />
+  <meta name="twitter:description" content="시청거리와 예산에 맞는 TV 크기를 계산해보세요." />
+  <meta name="twitter:image" content="https://hstv.onentop.art/assets/og-tv-calculator.png" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icons/icon-192.png" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png" />
@@ -20,7 +35,10 @@
         <span>거리·시력·예산·환경 맞춤 추천</span>
       </div>
     </div>
-    <button id="installBtn" class="ghost-btn" type="button" hidden>앱 설치</button>
+    <div class="header-actions">
+      <button id="shareBtn" class="ghost-btn share-btn" type="button" aria-label="우리집 TV 계산기 공유하기">공유</button>
+      <button id="installBtn" class="ghost-btn" type="button" hidden>앱 설치</button>
+    </div>
   </header>
 
   <main class="shell">
@@ -104,12 +122,26 @@
         <div><span>벽걸이 설치 가이드</span><strong id="mountHeight">화면 중심 약 105~115cm</strong><p id="mountNote">앉았을 때 눈높이 기준. 벽체와 콘센트 위치를 함께 확인하세요.</p></div>
         <a href="tel:01050928232">벽걸이 TV 설치 상담</a>
       </div>
-      <div class="ad-slot result-ad" aria-label="광고 영역"><span>AD</span><p>TV 쇼핑 · 설치 · 제휴 배너 영역</p></div>
+      <div class="ad-slot result-ad" aria-label="광고 영역"><span>AD</span><p>광고 준비 중 · 제휴 문의 010-5092-8232</p></div>
       <p class="result-note">시력·가격·설치 결과는 구매 전 확인을 돕는 참고값입니다.</p>
     </section>
   </main>
 
-  <footer>© TV Calculator · 스마트한 TV 선택을 위한 참고 계산기</footer>
+  <footer>
+    <span>© TV Calculator · 스마트한 TV 선택을 위한 참고 계산기</span>
+    <nav aria-label="사이트 안내"><a href="./privacy.html">개인정보처리방침</a><a href="tel:01050928232">문의</a></nav>
+  </footer>
+
+  <dialog id="iosInstallDialog" class="install-dialog" aria-labelledby="iosInstallTitle">
+    <button id="closeInstallDialog" class="dialog-close" type="button" aria-label="닫기">×</button>
+    <strong id="iosInstallTitle">아이폰에 앱으로 설치하기</strong>
+    <ol>
+      <li>Safari 아래쪽의 <b>공유</b> 버튼을 누르세요.</li>
+      <li><b>홈 화면에 추가</b>를 선택하세요.</li>
+      <li>오른쪽 위의 <b>추가</b>를 누르면 완료됩니다.</li>
+    </ol>
+  </dialog>
+  <div id="shareToast" class="share-toast" role="status" aria-live="polite" hidden>주소를 복사했습니다.</div>
   <script src="./app.js" defer></script>
 </body>
 </html>

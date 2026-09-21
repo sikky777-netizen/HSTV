@@ -165,9 +165,80 @@
 
   let deferredPrompt = null;
   const installBtn = $('installBtn');
+  const iosInstallDialog = $('iosInstallDialog');
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+  if(isIOS && !isStandalone){
+    installBtn.hidden = false;
+    installBtn.textContent = '홈 화면에 추가';
+  }
   window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.hidden = false; });
-  installBtn.addEventListener('click', async () => { if(!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; installBtn.hidden = true; });
+  installBtn.addEventListener('click', async () => {
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.hidden = true;
+      return;
+    }
+    if(isIOS) iosInstallDialog.showModal();
+  });
   window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
+
+  $('closeInstallDialog').addEventListener('click', () => iosInstallDialog.close());
+  iosInstallDialog.addEventListener('click', (e) => {
+    if(e.target === iosInstallDialog) iosInstallDialog.close();
+  });
+
+  const showShareToast = (message) => {
+    const toast = $('shareToast');
+    toast.textContent = message;
+    toast.hidden = false;
+    window.clearTimeout(showShareToast.timer);
+    showShareToast.timer = window.setTimeout(() => { toast.hidden = true; }, 2200);
+  };
+
+  const copyShareUrl = async (url) => {
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(url);
+    } else {
+      const input = document.createElement('textarea');
+      input.value = url;
+      input.setAttribute('readonly','');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+  };
+
+  $('shareBtn').addEventListener('click', async () => {
+    const shareData = {
+      title: '우리집 TV 계산기',
+      text: '우리 집에 맞는 TV 크기를 계산해보세요.',
+      url: 'https://hstv.onentop.art/'
+    };
+    try {
+      if(navigator.share){
+        await navigator.share(shareData);
+      } else {
+        await copyShareUrl(shareData.url);
+        showShareToast('사이트 주소를 복사했습니다.');
+      }
+    } catch(error){
+      if(error && error.name !== 'AbortError'){
+        try {
+          await copyShareUrl(shareData.url);
+          showShareToast('사이트 주소를 복사했습니다.');
+        } catch(_error){
+          showShareToast('공유하지 못했습니다. 다시 시도해주세요.');
+        }
+      }
+    }
+  });
 
   if('serviceWorker' in navigator){ window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
 })();
